@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "weather-chat-ai"
+version = "0.1.0"
+description = ""
+authors = ["Matt Florence <matt@mattflo.com>"]
+readme = "README.md"
+packages = [{include = "weather_chat_ai"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+langchain = "~0.0.0"
+chainlit = "~0"
+google-search-results = "^2.4.2"
+pytz = "^2023.3"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+ruff = "~0.0.0"
+mypy = "^1.4.1"
+pytest = "^7.4.0"
+pytest-watch = "^4.2.0"
+pytest-notifier = "^1.0.4"
+pytest-mock = "^3.11.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
