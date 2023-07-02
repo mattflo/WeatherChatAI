@@ -50,18 +50,17 @@ Yes, you should wear a jacket tonight in Denver. The forecast indicates a low ar
 
 ## 📝 Other Examples
 
-```
-User: Is tomorrow a good day to mow the yard in Boston?
+> User: Is tomorrow a good day to mow the yard in Boston?
 
-Weather Chat AI: Based on the forecast for tomorrow in Boston, it is not the best day to mow the yard. There is a chance of rain showers and thunderstorms throughout the day, with a 60% chance of precipitation. Additionally, there is a chance of showers and thunderstorms likely in the afternoon. It would be better to choose a day with more favorable weather conditions for mowing the yard.
+> Weather Chat AI: Based on the forecast for tomorrow in Boston, it is not the best day to mow the yard. There is a chance of rain showers and thunderstorms throughout the day, with a 60% chance of precipitation. Additionally, there is a chance of showers and thunderstorms likely in the afternoon. It would be better to choose a day with more favorable weather conditions for mowing the yard.
 
-User: Is today a good day for a walk in Dallas?
+> User: Is today a good day for a walk in Dallas?
 
-Weather Chat AI: Today in Dallas, there is a chance of showers and thunderstorms, with temperatures reaching a high of around 95 degrees. The heat index values could be as high as 104. It may not be the most ideal day for a walk due to the potential for rain and the high temperatures.
+> Weather Chat AI: Today in Dallas, there is a chance of showers and thunderstorms, with temperatures reaching a high of around 95 degrees. The heat index values could be as high as 104. It may not be the most ideal day for a walk due to the potential for rain and the high temperatures.
 
-User: I'm traveling to Seattle on July 5. Should I bring an umbrella?
-Weather Chat AI: No, you should not bring an umbrella when traveling to Seattle on July 5. The forecast for that day is sunny with a high near 82 degrees.
-```
+> User: I'm traveling to Seattle on July 5. Should I bring an umbrella?
+
+> Weather Chat AI: No, you should not bring an umbrella when traveling to Seattle on July 5. The forecast for that day is sunny with a high near 82 degrees.
 
 ## ✔️ Prerequisites
 
@@ -72,7 +71,7 @@ Weather Chat AI: No, you should not bring an umbrella when traveling to Seattle 
 
 ## 🚀 Setup
 
-* `git clone <repo>`
+* `git clone git@github.com:mattflo/WeatherChatAI.git`
 * `poetry install`
 * `cp .env.example .env`
 * add your open api and serpapi keys to `.env`
