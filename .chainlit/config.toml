@@ -33,7 +33,7 @@ default_expand_messages = false
 hide_cot = false
 
 # Link to your github repo. This will add a github button in the UI's header.
-# github = ""
+github = "https://github.com/mattflo/WeatherChatAI"
 
 [meta]
 generated_by = "0.5.0"
