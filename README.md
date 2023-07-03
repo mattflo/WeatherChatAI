@@ -71,8 +71,21 @@ Yes, you should wear a jacket tonight in Denver. The forecast indicates a low ar
 
 ## 🚀 Setup
 
-* `git clone git@github.com:mattflo/WeatherChatAI.git`
-* `poetry install`
-* `cp .env.example .env`
-* add your open api and serpapi keys to `.env`
-* `make chainlit`
+```
+git clone git@github.com:mattflo/WeatherChatAI.git
+cd WeatherChatAI
+```
+
+```
+poetry install
+```
+
+```
+cp .env.example .env
+```
+
+Add your open api and serpapi keys to `.env`
+
+```
+make chainlit
+```
