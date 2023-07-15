@@ -35,3 +35,22 @@ format:
 .PHONY: doctest
 doctest:
 	python -m doctest weather_chat_ai/nws_chain.py
+
+## deploy:                deploy to fly.io
+deploy:
+	@poetry export -f requirements.txt --output requirements.txt
+
+	@if [ -z "$$(git status --porcelain)" ]; then \
+		flyctl deploy; \
+		git tag -f fly.io; \
+	else \
+	    git status --porcelain; \
+	fi
+
+## logs:                  watch the fly.io logs
+logs:
+	@flyctl logs
+
+## ssh:                   ssh into the fly.io instance
+ssh:
+	@flyctl ssh console
