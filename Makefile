@@ -53,3 +53,8 @@ logs:
 ## ssh:                   ssh into the fly.io instance
 ssh:
 	@flyctl ssh console
+
+## scale:                 show the fly.io instance scale info
+scale:
+	@echo https://fly.io/docs/apps/legacy-scaling/#viewing-the-current-vm-size
+	@flyctl scale show

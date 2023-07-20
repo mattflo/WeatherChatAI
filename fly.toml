@@ -7,7 +7,7 @@ app = "weather-chat-ai"
 primary_region = "den"
 
 [build]
-  builder = "paketobuildpacks/builder:full"
+  dockerfile = "Dockerfile"
 
 [env]
   PORT = "8080"
