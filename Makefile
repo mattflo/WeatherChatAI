@@ -41,8 +41,7 @@ deploy:
 	@poetry export -f requirements.txt --output requirements.txt
 
 	@if [ -z "$$(git status --porcelain)" ]; then \
-		flyctl deploy; \
-		git tag -f fly.io; \
+		flyctl deploy && git tag -f fly.io; \
 	else \
 	    git status --porcelain; \
 	fi
