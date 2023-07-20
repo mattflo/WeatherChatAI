@@ -11,6 +11,9 @@ primary_region = "den"
 
 [env]
   PORT = "8080"
+  LANGCHAIN_TRACING_V2=true
+  LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
+  LANGCHAIN_PROJECT="weather-chat-ai"
 
 [http_service]
   internal_port = 8080
