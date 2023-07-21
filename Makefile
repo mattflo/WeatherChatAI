@@ -18,6 +18,11 @@ test:
 chainlit:
 	poetry run chainlit run app.py -w
 
+## fly-chainlit:          run the app in fly.io mode
+.PHONY: fly-chainlit
+fly-chainlit:
+	poetry run chainlit run fly_app.py -w
+
 ## lint:                  run linters
 .PHONY: lint
 lint:

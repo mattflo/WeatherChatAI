@@ -18,4 +18,4 @@ ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8080/tcp
 
-CMD ["poetry", "run", "chainlit", "run", "app.py", "-h", "--port", "8080"]
+CMD ["poetry", "run", "chainlit", "run", "fly_app.py", "-h", "--port", "8080"]

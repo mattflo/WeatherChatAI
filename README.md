@@ -84,7 +84,7 @@ poetry install
 cp .env.example .env
 ```
 
-Add your open api and serpapi keys to `.env`
+Add your open api and serpapi keys to `.env`. See [.env.example](.env.example)
 
 ```
 make chainlit
