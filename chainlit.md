@@ -1,14 +1,20 @@
-# Welcome to Chainlit! 🚀🤖
+# ☁️ ❄️ ⚡ Weather Chat AI ⛅ 🌡️ ☂️
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+## ☀️ Conversational Weather 💦
 
-## Useful Links 🔗
+See the [github repo](https://github.com/mattflo/WeatherChatAI) for more info and all the code.
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/ZThrUxbAYw) to ask questions, share your projects, and connect with other developers! 💬
+## Answer vs. Search
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
+Don't just get the weather. Ask what you really want to know and let me answer your underlying question.
 
-## Welcome screen
+## 📝 Examples
 
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+* `Should I wear a jacket tonight in Denver?`
+* `I'm traveling to Seattle on Monday. Should I bring an umbrella?`
+* `Which day is better for a hike this weekend in Leadville?`
+
+## ⛔ Limitations
+
+* **Location Unaware** I don't know where you are, so tell me the location you're interested in.
+* **No International Support** I'm powered by the [National Weather Service](https://www.weather.gov/), so I can only answer questions about the United States.

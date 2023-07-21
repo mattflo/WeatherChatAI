@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 import traceback
@@ -22,6 +23,23 @@ DAYS = [
     "Saturday",
     "Sunday",
 ]
+
+FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+
+def create_logger(name):
+    logger = logging.getLogger(name)
+    logger.propagate = False
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    logger.addHandler(ch)
+    formatter = logging.Formatter(FORMAT)
+    ch.setFormatter(formatter)
+    return logger
+
+
+logger = create_logger(__name__)
 
 
 class NWSChain(Chain):
@@ -56,16 +74,19 @@ class NWSChain(Chain):
     async def nws_weather(self, location):
         """Get the weather forecast for a given location."""
         try:
+            logger.info(f"Retrieving forecast for: {location}")
             lat, lon = self.get_lat_lon(location)
             (tz_name, forecast_url) = self.get_nws_gridpoints(lat, lon)
             nws_forecasts = self.get_nws_forecast(forecast_url)
             ts = datetime.now(tz=pytz.timezone(tz_name))
             forecasts = self.normalize_forecast_days(nws_forecasts, ts)
             prefix = self.get_current_day_and_time(ts, location)
+            logger.info(f"Prepared {len(forecasts)} forecast rows.")
             return "\n".join([prefix, "", "Forecast:"] + forecasts)
         except Exception as e:
             print(str(e))
-            traceback.print_exc()
+            logger.exception("Failed to get weather forecast.")
+            # traceback.print_exc()
             return f"Sorry, I'm having trouble finding the weather for {location}."
 
     @staticmethod
@@ -74,6 +95,7 @@ class NWSChain(Chain):
         res = requests.get(forecast_url)
         forecast = json.loads(res.content)
         periods = forecast["properties"]["periods"]
+        logger.info(f"Found {len(periods)} forecast periods.")
         return [f"{p['name']}: {p['detailedForecast']}" for p in periods]
 
     @staticmethod
@@ -91,6 +113,7 @@ class NWSChain(Chain):
         gps = res["place_results"]["gps_coordinates"]
         lat = gps["latitude"]
         lon = gps["longitude"]
+        logger.info(f"Found lat/lon: {lat}, {lon}")
         return (lat, lon)
 
     @staticmethod
@@ -100,6 +123,7 @@ class NWSChain(Chain):
         j = json.loads(resp.content)
         tz = j["properties"]["timeZone"]
         forecast_url = j["properties"]["forecast"]
+        logger.info(f"Timezone: {tz}, Forecast URL: {forecast_url}")
         return (tz, forecast_url)
 
     @staticmethod

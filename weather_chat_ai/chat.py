@@ -43,4 +43,5 @@ Question: {input}"""
         return cls(
             chains=[location_chain, NWSChain(), reply_chain],
             input_variables=["input"],
+            tags=[whoami],
         )
