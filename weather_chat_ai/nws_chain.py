@@ -85,7 +85,9 @@ class NWSChain(Chain):
             return "\n".join([prefix, "", "Forecast:"] + forecasts)
         except Exception as e:
             logger.exception("Failed to get weather forecast.")
-            return {"forecast": f"Sorry, I'm having trouble finding the weather for {location}."}
+            return {
+                "forecast": f"Sorry, I'm having trouble finding the weather for {location}."
+            }
 
     @staticmethod
     def get_nws_forecast(forecast_url):

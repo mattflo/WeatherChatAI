@@ -48,6 +48,9 @@ async def main(message: str):
     chain = cl.user_session.get("chain")
     whoami = cl.user_session.get("whoami")
 
-    res = await chain.acall({"input": message, "whoami": whoami}, callbacks=[cl.AsyncLangchainCallbackHandler()])
+    res = await chain.acall(
+        {"input": message, "whoami": whoami},
+        callbacks=[cl.AsyncLangchainCallbackHandler()],
+    )
 
     await cl.Message(content=res["text"]).send()
