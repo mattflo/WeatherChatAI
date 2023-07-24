@@ -20,8 +20,6 @@ async def main():
 
 **What's your 📪 Email, 🐦 Twitter, ⛓️ Linked In?** Whatever you're comfortable sharing!
 
-If you've been here before on the same device, but your session has expired and you're seeing this again, thanks to the chainlit team 🔗🔥 you have a convenient way to resend a previous message! 💪
-
 Please, and many, many thank yous! 🙏"""
 
         greeting = """🙏 Awesome, let's get started! Below are some helpful hints.
