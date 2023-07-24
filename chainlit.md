@@ -17,4 +17,5 @@ Don't just get the weather. Ask what you really want to know and let me answer y
 ## ⛔ Limitations
 
 * **Location Unaware** I don't know where you are, so tell me the location you're interested in.
+* **No Memory** I don't currently have memory. Please include the location in every message.
 * **No International Support** I'm powered by the [National Weather Service](https://www.weather.gov/), so I can only answer questions about the United States.
