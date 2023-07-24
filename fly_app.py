@@ -59,7 +59,9 @@ async def main(message: str):
         res = await chain.acall(
             {"input": message, "whoami": whoami},
             callbacks=[cl.AsyncLangchainCallbackHandler()],
+            include_run_info=True,
         )
+        logger.info(f"Run id: {res['__run'].run_id}")
 
         await cl.Message(content=res["text"]).send()
     except Exception as e:
