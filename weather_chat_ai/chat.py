@@ -14,7 +14,9 @@ class WeatherChat(SequentialChain):
     @classmethod
     def create_chain(cls, whoami=""):
         location_template = """What is the location of the weather request? Answer in the following format: city, state. If no location is present in the weather request, answer Denver, CO.
-weather request: {input}"""
+weather request: {input}
+
+Location:"""
         location_chain = LLMChain(
             llm=OpenAI(),
             prompt=PromptTemplate.from_template(location_template),

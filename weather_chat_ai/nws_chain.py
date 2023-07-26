@@ -48,7 +48,7 @@ class NWSChain(Chain):
         inputs: Dict[str, Any],
         run_manager: Optional[CallbackManagerForChainRun] = None,
     ) -> Dict[str, str]:
-        input = inputs["location"].strip()
+        input = inputs["location"].strip("? \n")
         inputs["location"] = input
         forecast = self.nws_weather(input)
         return {"forecast": forecast}
