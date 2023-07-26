@@ -20,7 +20,7 @@ async def main():
 
 My human supervisors 👥 would love to know who you are and how to get in touch!
 
-**What's your 📪 Email, 🐦 Twitter, ⛓️ Linked In?** Whatever you're comfortable sharing!
+**What's your 📪 Email, 🐦 Twitter, ⛓️ Linked In?**
 
 Enter whatever you're comfortable sharing in the chat box below. Please, and many, many thank yous! 🙏"""
 
