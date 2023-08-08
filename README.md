@@ -4,6 +4,8 @@
 
 There are dozens of weather APIs out there. But most of them aren't well suited to chat over. They are made for computers 🖥️ to consume, not LLMs 🧠. Then I realized the old-school  🏫 🇺🇸 [National Weather Service](https://www.weather.gov/) text based forecast would be perfect.
 
+Live Demo: https://weather-chat-ai.fly.dev/
+
 ## ⚙️ How it works
 
 1. Ask a weather related question.
