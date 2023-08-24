@@ -23,7 +23,11 @@ Location:"""
             output_key="location",
         )
 
-        system_template = """Answer a question about the weather. Below is the forecast you should use to answer the question. It includes the current day and time for reference. You may include the location in your answer, but you should not include the current day or time. If you don't know the answer, don't make anything up. Just say you don't know."""
+        system_template = """Answer a question about the weather. Below is the forecast you should use to answer the question. It includes the current day and time for reference. You may include the location in your answer, but you should not include the current day or time.
+
+You have seven days of forecast, for questions about next week, answer based on the days for which you have a forecast
+
+If you don't know the answer, don't make anything up. Just say you don't know."""
 
         human_template = """{forecast}
 
