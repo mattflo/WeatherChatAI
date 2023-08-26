@@ -1,10 +1,34 @@
 # ☁️ ❄️ ⚡ Weather Chat AI ⛅ 🌡️ ☂️
 
+☁️ ❄️ ⚡ Don't just get the weather. Get the answer to your underlying weather-related question. Using retrieval augmented generation with LangChain, OpenAI, the National Weather Service, and Chainlit. ⛅ 🌡️ ☂️
+
+Live Demo: https://weather-chat-ai.fly.dev/
+
 ## ☀️ Conversational Weather 💦
 
 There are dozens of weather APIs out there. But most of them aren't well suited to chat over. They are made for computers 🖥️ to consume, not LLMs 🧠. Then I realized the old-school  🏫 🇺🇸 [National Weather Service](https://www.weather.gov/) text based forecast would be perfect.
 
-Live Demo: https://weather-chat-ai.fly.dev/
+## 👥 Who is this for?
+
+WeatherChatAI is built for a couple different audiences:
+
+First, it's for anyone who wants to learn how to 🛠️ build LLM applications. Multiple LLM calls have to be composed together into a chain to build anything more interesting than Hello World. This project is a simple example of how to do that with [LangChain](https://github.com/langchain-ai/langchain).
+
+WeatherChatAI is also built to help users learn how to leverage 💪 new AI-based tools. Increasingly, our world is shifting from the search engine to the answer engine paradigm. The next phase in this incremental journey that is already well underway is a shift toward action engines. The more time we save on the small things of everyday life, like answering our weather-related questions, will snowball making us all more productive.
+
+## 📝 Examples
+
+> User: Is tomorrow a good day to mow the yard in Boston?
+
+> Weather Chat AI: Based on the forecast for tomorrow in Boston, it is not the best day to mow the yard. There is a chance of rain showers and thunderstorms throughout the day, with a 60% chance of precipitation. Additionally, there is a chance of showers and thunderstorms likely in the afternoon. It would be better to choose a day with more favorable weather conditions for mowing the yard.
+
+> User: Is today a good day for a walk in Dallas?
+
+> Weather Chat AI: Today in Dallas, there is a chance of showers and thunderstorms, with temperatures reaching a high of around 95 degrees. The heat index values could be as high as 104. It may not be the most ideal day for a walk due to the potential for rain and the high temperatures.
+
+> User: I'm traveling to Seattle on July 5. Should I bring an umbrella?
+
+> Weather Chat AI: No, you should not bring an umbrella when traveling to Seattle on July 5. The forecast for that day is sunny with a high near 82 degrees.
 
 ## ⚙️ How it works
 
@@ -50,20 +74,6 @@ Question: Should I wear a jacket tonight in Denver?
 Yes, you should wear a jacket tonight in Denver. The forecast indicates a low around 53 degrees with a west northwest wind of 3 to 9 mph.
 ```
 
-## 📝 Other Examples
-
-> User: Is tomorrow a good day to mow the yard in Boston?
-
-> Weather Chat AI: Based on the forecast for tomorrow in Boston, it is not the best day to mow the yard. There is a chance of rain showers and thunderstorms throughout the day, with a 60% chance of precipitation. Additionally, there is a chance of showers and thunderstorms likely in the afternoon. It would be better to choose a day with more favorable weather conditions for mowing the yard.
-
-> User: Is today a good day for a walk in Dallas?
-
-> Weather Chat AI: Today in Dallas, there is a chance of showers and thunderstorms, with temperatures reaching a high of around 95 degrees. The heat index values could be as high as 104. It may not be the most ideal day for a walk due to the potential for rain and the high temperatures.
-
-> User: I'm traveling to Seattle on July 5. Should I bring an umbrella?
-
-> Weather Chat AI: No, you should not bring an umbrella when traveling to Seattle on July 5. The forecast for that day is sunny with a high near 82 degrees.
-
 ## ✔️ Prerequisites
 
 * python3 - tested with 3.10
@@ -91,3 +101,8 @@ Add your open api and serpapi keys to `.env`. See [.env.example](.env.example)
 ```
 make chainlit
 ```
+
+## 🧭 Roadmap
+
+- [] International Support
+- [] Experiment with OSS alternatives to OpenAI
