@@ -27,6 +27,10 @@ Location:"""
 
 You have seven days of forecast, for questions about next week, answer based on the days for which you have a forecast
 
+If the requested day is after the last day in the forecast, explain you are only provided with a 7-day forecast.
+
+If the request is for a place outside the U.S., apologize that you currently only have forecast data in the U.S. Also share that your human supervisors are working to add international support in the near future.
+
 If you don't know the answer, don't make anything up. Just say you don't know."""
 
         human_template = """{forecast}
