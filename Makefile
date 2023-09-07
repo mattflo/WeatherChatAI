@@ -6,7 +6,7 @@ help: Makefile
 ## watch:                 run tests in watch mode
 .PHONY: watch
 watch:
-	poetry run ptw
+	poetry run ptw -- -- -rP
 
 ## test:                  run tests
 .PHONY: test
