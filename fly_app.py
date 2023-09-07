@@ -45,9 +45,7 @@ Don't just get the weather. Ask what you really want to know and let me answer y
 
         res = await cl.AskUserMessage(content=email_prompt, timeout=60).send()
         if res:
-            whoami = res["content"]
-            user_session.set("whoami", whoami)
-            cl.user_session.set("chain", WeatherChat.create_chain(whoami))
+            user_session.set("chain", WeatherChat.create_chain(whoami=res["content"]))
             await cl.Message(content=greeting).send()
     except Exception as e:
         logger.exception("Failed to start chat.")
@@ -57,10 +55,9 @@ Don't just get the weather. Ask what you really want to know and let me answer y
 async def main(message: str):
     try:
         chain = cl.user_session.get("chain")
-        whoami = cl.user_session.get("whoami")
 
         res = await chain.acall(
-            {"input": message, "whoami": whoami},
+            {"input": message},
             callbacks=[cl.AsyncLangchainCallbackHandler()],
             include_run_info=True,
         )

@@ -11,16 +11,15 @@ def init_db():
 
 @cl.on_chat_start
 async def main():
-    cl.user_session.set("chain", WeatherChat.create_chain())
+    cl.user_session.set("chain", WeatherChat.create_chain(tags=["local-chainlit"]))
 
 
 @cl.on_message
 async def main(message: str):
     chain = cl.user_session.get("chain")
-    whoami = cl.user_session.get("whoami")
 
     res = await chain.acall(
-        {"input": message, "whoami": whoami},
+        {"input": message},
         callbacks=[cl.AsyncLangchainCallbackHandler()],
     )
 
