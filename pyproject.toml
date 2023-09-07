@@ -23,6 +23,7 @@ pytest = "^7.4.0"
 pytest-watch = "^4.2.0"
 pytest-notifier = "^1.0.4"
 pytest-mock = "^3.11.1"
+pytest-asyncio = "^0.21.1"
 
 [build-system]
 requires = ["poetry-core"]
