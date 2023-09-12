@@ -13,7 +13,7 @@ def dated_tag():
 @pytest.mark.asyncio
 async def test_chain():
     day_of_week = datetime.now().strftime("%A")
-    chain = WeatherChat.create_chain(tags=[dated_tag()])
+    chain = WeatherChat(tags=[dated_tag()])
     queries = [
         "what is the weather in london today?",
         f"what is the weather next {day_of_week}?",
