@@ -1,10 +1,23 @@
 version: '3'
 
 services:
+  db:
+    build:
+      context: .
+      dockerfile: pg-Dockerfile
+    environment:
+      - POSTGRES_PASSWORD=wai
+      - POSTGRES_USER=wai
+      - POSTGRES_DB=wai
+    expose:
+      - "5432/tcp"
+    ports:
+      - "15432:5432/tcp"
   web:
     build:
       context: .
     environment:
+      - DATABASE_URL=postgres://wai:wai@db:5432/wai
       - OPENAI_API_KEY
       - SERPAPI_API_KEY
       - LANGCHAIN_TRACING_V2
@@ -13,3 +26,5 @@ services:
       - LANGCHAIN_PROJECT
     ports:
       - 8000:8000
+    depends_on:
+      - db

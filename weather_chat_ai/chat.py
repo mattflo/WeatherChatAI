@@ -1,6 +1,10 @@
+import uuid
+import os
+
 from langchain import LLMChain, OpenAI, PromptTemplate
 from langchain.chains import SequentialChain
 from langchain.chat_models import ChatOpenAI
+from langchain.memory import ConversationBufferWindowMemory, PostgresChatMessageHistory
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
@@ -11,12 +15,19 @@ from weather_chat_ai.nws_chain import NWSChain
 
 
 class WeatherChat(SequentialChain):
-    @classmethod
-    def create_chain(cls, whoami="", tags=[]):
-        location_template = """What is the location of the weather request? Answer in the following format: city, state. If no location is present in the weather request, answer Denver, CO.
+    def __init__(self, whoami="", tags=[], session_id: str = None):
+        if session_id is None:
+            session_id = str(uuid.uuid4())
+
+        location_template = """What is the location of the weather request? Answer in the following format: city, state. If no location is present in the weather request or chat history, answer Denver, CO.
+
+chat history:
+{history}
+
 weather request: {input}
 
 Location:"""
+
         location_chain = LLMChain(
             llm=OpenAI(),
             prompt=PromptTemplate.from_template(location_template),
@@ -50,9 +61,19 @@ Question: {input}"""
             ),
         )
 
-        return cls(
+        history = PostgresChatMessageHistory(
+            connection_string=os.getenv("DATABASE_URL"),
+            session_id=session_id,
+        )
+
+        memory = ConversationBufferWindowMemory(
+            chat_memory=history,
+        )
+
+        super().__init__(
             chains=[location_chain, NWSChain(), reply_chain],
             input_variables=["input"],
             tags=tags,
             metadata={"whoami": whoami},
+            memory=memory,
         )

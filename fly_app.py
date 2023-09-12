@@ -45,7 +45,10 @@ Don't just get the weather. Ask what you really want to know and let me answer y
 
         res = await cl.AskUserMessage(content=email_prompt, timeout=60).send()
         if res:
-            user_session.set("chain", WeatherChat.create_chain(whoami=res["content"]))
+            session_id = cl.user_session.get("id")
+            user_session.set(
+                "chain", WeatherChat(whoami=res["content"], session_id=session_id)
+            )
             await cl.Message(content=greeting).send()
     except Exception as e:
         logger.exception("Failed to start chat.")
