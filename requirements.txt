@@ -301,7 +301,7 @@ google-search-results==2.4.2 ; python_version >= "3.10" and python_version < "4.
 googleapis-common-protos==1.61.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:22f1915393bb3245343f6efe87f6fe868532efc12aa26b391b15132e1279f1c0 \
     --hash=sha256:8a64866a97f6304a7179873a465d6eee97b7a24ec6cfd78e0f575e96b821240b
-greenlet==3.0.1 ; platform_machine == "aarch64" and python_version >= "3.10" and python_version < "4.0" or platform_machine == "ppc64le" and python_version >= "3.10" and python_version < "4.0" or platform_machine == "x86_64" and python_version >= "3.10" and python_version < "4.0" or platform_machine == "amd64" and python_version >= "3.10" and python_version < "4.0" or platform_machine == "AMD64" and python_version >= "3.10" and python_version < "4.0" or platform_machine == "win32" and python_version >= "3.10" and python_version < "4.0" or platform_machine == "WIN32" and python_version >= "3.10" and python_version < "4.0" \
+greenlet==3.0.1 ; python_version >= "3.10" and python_version < "4.0" and (platform_machine == "aarch64" or platform_machine == "ppc64le" or platform_machine == "x86_64" or platform_machine == "amd64" or platform_machine == "AMD64" or platform_machine == "win32" or platform_machine == "WIN32") \
     --hash=sha256:0a02d259510b3630f330c86557331a3b0e0c79dac3d166e449a39363beaae174 \
     --hash=sha256:0b6f9f8ca7093fd4433472fd99b5650f8a26dcd8ba410e14094c1e44cd3ceddd \
     --hash=sha256:100f78a29707ca1525ea47388cec8a049405147719f47ebf3895e7509c6446aa \
@@ -903,6 +903,9 @@ sqlalchemy==2.0.22 ; python_version >= "3.10" and python_version < "4.0" \
 starlette==0.27.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:6a6b0d042acb8d469a01eba54e9cda6cbd24ac602c4cd016723117d6a7e73b75 \
     --hash=sha256:918416370e846586541235ccd38a474c08b80443ed31c578a418e2209b3eef91
+structlog==23.2.0 ; python_version >= "3.10" and python_version < "4.0" \
+    --hash=sha256:16a167e87b9fa7fae9a972d5d12805ef90e04857a93eba479d4be3801a6a1482 \
+    --hash=sha256:334666b94707f89dbc4c81a22a8ccd34449f0201d5b1ee097a030b577fa8c858
 syncer==2.0.3 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:4340eb54b54368724a78c5c0763824470201804fe9180129daf3635cb500550f
 tenacity==8.2.3 ; python_version >= "3.10" and python_version < "4.0" \
