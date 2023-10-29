@@ -52,14 +52,17 @@ Don't just get the weather. Ask what you really want to know and let me answer y
 async def main(message: cl.Message):
     try:
         chain = cl.user_session.get("chain")
+        cb = cl.AsyncLangchainCallbackHandler(
+            stream_final_answer=True,
+        )
+        cb.answer_reached = True
 
         res = await chain.acall(
             message.content,
-            callbacks=[cl.AsyncLangchainCallbackHandler()],
+            callbacks=[cb],
             include_run_info=True,
         )
         logger.info(f"Run id: {res['__run'].run_id}")
 
-        await cl.Message(content=res["text"]).send()
     except Exception as e:
         logger.exception("Failed to process message.")

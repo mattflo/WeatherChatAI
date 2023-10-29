@@ -13,10 +13,12 @@ async def main():
 @cl.on_message
 async def main(message: cl.Message):
     chain = cl.user_session.get("chain")
-
-    res = await chain.acall(
-        message.content,
-        callbacks=[cl.AsyncLangchainCallbackHandler()],
+    cb = cl.AsyncLangchainCallbackHandler(
+        stream_final_answer=True,
     )
+    cb.answer_reached = True
 
-    await cl.Message(content=res["text"]).send()
+    await chain.acall(
+        message.content,
+        callbacks=[cb],
+    )

@@ -26,7 +26,7 @@ Never answer with the entire forecast. If the question doesn't contain any speci
 Location: {location}
 Question: {input}"""
         super().__init__(
-            llm=ChatOpenAI(temperature=0),
+            llm=ChatOpenAI(temperature=0, streaming=True),
             prompt=ChatPromptTemplate.from_messages(
                 [
                     SystemMessagePromptTemplate.from_template(system_template),
