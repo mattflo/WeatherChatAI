@@ -14,8 +14,16 @@ def dated_tag():
 
 # @pytest.mark.focus
 @pytest.mark.asyncio
-async def test_chain():
+async def test_async_chain():
     chain = WeatherChatChain(tags=[dated_tag()])
     result = await chain.acall("What is the weather today in Denver, CO?")
+
+    assert "in Denver" in result["text"]
+
+
+# @pytest.mark.focus
+def test_sync_chain():
+    chain = WeatherChatChain(tags=[dated_tag()])
+    result = chain("What is the weather today in Denver, CO?")
 
     assert "in Denver" in result["text"]
