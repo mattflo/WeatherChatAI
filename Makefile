@@ -3,6 +3,12 @@
 help: Makefile
 	@sed -n 's/^## \?//p' $<
 
+## isort:                 run isort
+.PHONY: isort
+isort:
+	@poetry run isort --profile black .
+	@poetry run autoflake --remove-all-unused-imports --recursive --remove-unused-variables --in-place .
+
 ## watch:                 run tests in watch mode
 .PHONY: watch
 watch:

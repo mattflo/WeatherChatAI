@@ -1,7 +1,6 @@
-import logging
 import json
+import logging
 import os
-import traceback
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
@@ -89,8 +88,7 @@ class NWSChain(Chain):
                 "forecast": f"Sorry, I'm having trouble finding the weather for {location}."
             }
 
-    @staticmethod
-    def get_nws_forecast(forecast_url):
+    def get_nws_forecast(self, forecast_url):
         """Get the weather forecast from the NWS API."""
         res = requests.get(forecast_url)
         forecast = json.loads(res.content)
@@ -98,8 +96,7 @@ class NWSChain(Chain):
         logger.info(f"Found {len(periods)} forecast periods.")
         return [f"{p['name']}: {p['detailedForecast']}" for p in periods]
 
-    @staticmethod
-    def get_lat_lon(location):
+    def get_lat_lon(self, location):
         """Get the latitude and longitude for a given location from google maps using SerpApi."""
         search = GoogleSearch(
             {
@@ -116,8 +113,7 @@ class NWSChain(Chain):
         logger.info(f"Found lat/lon: {lat}, {lon}")
         return (lat, lon)
 
-    @staticmethod
-    def get_nws_gridpoints(lat, lon):
+    def get_nws_gridpoints(self, lat, lon):
         """Get the timezone and forecast url for a given latitude and longitude from the NWS API."""
         resp = requests.get(f"https://api.weather.gov/points/{lat},{lon}")
         j = json.loads(resp.content)
@@ -126,8 +122,7 @@ class NWSChain(Chain):
         logger.info(f"Timezone: {tz}, Forecast URL: {forecast_url}")
         return (tz, forecast_url)
 
-    @staticmethod
-    def normalize_forecast_days(forecast, ts):
+    def normalize_forecast_days(self, forecast, ts):
         """Normalize the labels for the days and nights of the forecast to eliminate holiday names and add dates."""
         current_day_of_week_index = ts.weekday()
         for index, row in enumerate(forecast[2::2]):
@@ -141,8 +136,7 @@ class NWSChain(Chain):
             ] = f"{day_label} Night, {date}: {next_row.split(': ', 1)[1]}"
         return forecast
 
-    @staticmethod
-    def get_current_day_and_time(ts, location):
+    def get_current_day_and_time(self, ts, location):
         """Build the string to present the llm with the current day of week, date, and time in the given location.
 
         Usage Examples:

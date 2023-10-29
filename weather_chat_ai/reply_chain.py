@@ -1,40 +1,14 @@
-import uuid
-import os
-
-from langchain.prompts import PromptTemplate
-from langchain.llms import OpenAI
-from langchain.chains import SequentialChain, LLMChain
+from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferWindowMemory, PostgresChatMessageHistory
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
     SystemMessagePromptTemplate,
 )
 
-from weather_chat_ai.nws_chain import NWSChain
 
-
-class WeatherChat(SequentialChain):
-    def __init__(self, whoami="", tags=[], session_id: str = None):
-        if session_id is None:
-            session_id = str(uuid.uuid4())
-
-        location_template = """What is the location of the weather request? Answer in the following format: city, state. If no location is present in the weather request or chat history, answer Denver, CO.
-
-chat history:
-{history}
-
-weather request: {input}
-
-Location:"""
-
-        location_chain = LLMChain(
-            llm=OpenAI(),
-            prompt=PromptTemplate.from_template(location_template),
-            output_key="location",
-        )
-
+class ReplyChain(LLMChain):
+    def __init__(self):
         system_template = """Answer a question about the weather. Below is the forecast you should use to answer the question. It includes the current day and time for reference. You may include the location in your answer, but you should not include the current day or time.
 
 You have seven days of forecast, for questions about next week, answer based on the days for which you have a forecast
@@ -51,8 +25,7 @@ Never answer with the entire forecast. If the question doesn't contain any speci
 
 Location: {location}
 Question: {input}"""
-
-        reply_chain = LLMChain(
+        super().__init__(
             llm=ChatOpenAI(temperature=0),
             prompt=ChatPromptTemplate.from_messages(
                 [
@@ -60,21 +33,4 @@ Question: {input}"""
                     HumanMessagePromptTemplate.from_template(human_template),
                 ]
             ),
-        )
-
-        history = PostgresChatMessageHistory(
-            connection_string=os.getenv("DATABASE_URL"),
-            session_id=session_id,
-        )
-
-        memory = ConversationBufferWindowMemory(
-            chat_memory=history,
-        )
-
-        super().__init__(
-            chains=[location_chain, NWSChain(), reply_chain],
-            input_variables=["input"],
-            tags=tags,
-            metadata={"whoami": whoami},
-            memory=memory,
         )

@@ -1,10 +1,8 @@
 import chainlit as cl
-
 from chainlit import user_session
 
-from weather_chat_ai.chat import WeatherChat
 from weather_chat_ai.nws_chain import create_logger
-
+from weather_chat_ai.weather_chat_chain import WeatherChatChain
 
 logger = create_logger(__name__)
 
@@ -43,7 +41,7 @@ Don't just get the weather. Ask what you really want to know and let me answer y
         if res:
             session_id = cl.user_session.get("id")
             user_session.set(
-                "chain", WeatherChat(whoami=res["content"], session_id=session_id)
+                "chain", WeatherChatChain(whoami=res["content"], session_id=session_id)
             )
             await cl.Message(content=greeting).send()
     except Exception as e:
@@ -56,7 +54,7 @@ async def main(message: cl.Message):
         chain = cl.user_session.get("chain")
 
         res = await chain.acall(
-            {"input": message.content},
+            message.content,
             callbacks=[cl.AsyncLangchainCallbackHandler()],
             include_run_info=True,
         )

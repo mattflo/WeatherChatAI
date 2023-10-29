@@ -21,9 +21,8 @@ def test_day_name_normalization():
         "Saturday Night: A slight chance of showers and thunderstorms before midnight. Partly cloudy, with a low around 48.",
     ]
 
-    normalized_forecast = NWSChain.normalize_forecast_days(
-        forecast, datetime(2023, 7, 2)
-    )
+    chain = NWSChain()
+    normalized_forecast = chain.normalize_forecast_days(forecast, datetime(2023, 7, 2))
 
     # for f in normalized_forecast:
     #     print(f)
