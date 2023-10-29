@@ -1,12 +1,8 @@
 import chainlit as cl
-from chainlit.db import db_push
+
 from chainlit import user_session
 
 from weather_chat_ai.chat import WeatherChat
-
-
-def init_db():
-    db_push()
 
 
 @cl.on_chat_start
@@ -17,11 +13,11 @@ async def main():
 
 
 @cl.on_message
-async def main(message: str):
+async def main(message: cl.Message):
     chain = cl.user_session.get("chain")
 
     res = await chain.acall(
-        {"input": message},
+        {"input": message.content},
         callbacks=[cl.AsyncLangchainCallbackHandler()],
     )
 

@@ -1,8 +1,9 @@
 import uuid
 import os
 
-from langchain import LLMChain, OpenAI, PromptTemplate
-from langchain.chains import SequentialChain
+from langchain.prompts import PromptTemplate
+from langchain.llms import OpenAI
+from langchain.chains import SequentialChain, LLMChain
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferWindowMemory, PostgresChatMessageHistory
 from langchain.prompts.chat import (

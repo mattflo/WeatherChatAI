@@ -1,5 +1,5 @@
 import chainlit as cl
-from chainlit.db import db_push
+
 from chainlit import user_session
 
 from weather_chat_ai.chat import WeatherChat
@@ -7,10 +7,6 @@ from weather_chat_ai.nws_chain import create_logger
 
 
 logger = create_logger(__name__)
-
-
-def init_db():
-    db_push()
 
 
 @cl.on_chat_start
@@ -55,12 +51,12 @@ Don't just get the weather. Ask what you really want to know and let me answer y
 
 
 @cl.on_message
-async def main(message: str):
+async def main(message: cl.Message):
     try:
         chain = cl.user_session.get("chain")
 
         res = await chain.acall(
-            {"input": message},
+            {"input": message.content},
             callbacks=[cl.AsyncLangchainCallbackHandler()],
             include_run_info=True,
         )
