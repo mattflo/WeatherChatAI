@@ -1,10 +1,10 @@
 import chainlit as cl
+import structlog
 from chainlit import user_session
 
-from weather_chat_ai.nws_chain import create_logger
 from weather_chat_ai.weather_chat_chain import WeatherChatChain
 
-logger = create_logger(__name__)
+logger = structlog.get_logger()
 
 
 @cl.on_chat_start

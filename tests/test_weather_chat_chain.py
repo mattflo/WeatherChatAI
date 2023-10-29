@@ -12,20 +12,10 @@ def dated_tag():
     return f"{current_date}-{epoch_timestamp}"
 
 
+# @pytest.mark.focus
 @pytest.mark.asyncio
 async def test_chain():
-    day_of_week = datetime.now().strftime("%A")
     chain = WeatherChatChain(tags=[dated_tag()])
-    queries = [
-        "what is the weather in london today?",
-        f"what is the weather next {day_of_week}?",
-        "What is the weather today in Denver, CO?",
-    ]
+    result = await chain.acall("What is the weather today in Denver, CO?")
 
-    results = []
-
-    for query in queries:
-        result = await chain.acall({"input": query})
-        results.append(result)
-
-    print(results)
+    assert "in Denver" in result["text"]

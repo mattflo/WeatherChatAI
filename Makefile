@@ -7,7 +7,12 @@ help: Makefile
 .PHONY: isort
 isort:
 	@poetry run isort --profile black .
-	@poetry run autoflake --remove-all-unused-imports --recursive --remove-unused-variables --in-place .
+	@poetry run autoflake --remove-all-unused-imports --recursive --in-place .
+
+## watch-focus:           run tests in watch mode with focus
+.PHONY watch-focus:
+watch-focus:
+	LANGCHAIN_TRACING_V2=false poetry run ptw -- -- -rP -m focus
 
 ## watch:                 run tests in watch mode
 .PHONY: watch

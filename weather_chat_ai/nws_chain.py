@@ -1,11 +1,11 @@
 import json
-import logging
 import os
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import pytz
 import requests
+import structlog
 from langchain.callbacks.manager import (
     AsyncCallbackManagerForChainRun,
     CallbackManagerForChainRun,
@@ -26,19 +26,7 @@ DAYS = [
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 
-def create_logger(name):
-    logger = logging.getLogger(name)
-    logger.propagate = False
-    logger.setLevel(logging.DEBUG)
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    logger.addHandler(ch)
-    formatter = logging.Formatter(FORMAT)
-    ch.setFormatter(formatter)
-    return logger
-
-
-logger = create_logger(__name__)
+logger = structlog.get_logger()
 
 
 class NWSChain(Chain):
