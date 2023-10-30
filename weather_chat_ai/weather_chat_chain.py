@@ -24,9 +24,8 @@ class WeatherChatChain(SequentialChain):
         )
 
         super().__init__(
-            chains=[LocationChain(), NWSChain(), ReplyChain()],
+            chains=[LocationChain(memory), NWSChain(), ReplyChain()],
             input_variables=["input"],
             tags=tags,
             metadata={"whoami": whoami},
-            memory=memory,
         )
