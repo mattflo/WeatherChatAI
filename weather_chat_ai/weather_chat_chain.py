@@ -21,10 +21,11 @@ class WeatherChatChain(SequentialChain):
 
         memory = ConversationBufferWindowMemory(
             chat_memory=history,
+            input_key="input",
         )
 
         super().__init__(
-            chains=[LocationChain(memory), NWSChain(), ReplyChain()],
+            chains=[LocationChain(memory), NWSChain(), ReplyChain(memory)],
             input_variables=["input"],
             tags=tags,
             metadata={"whoami": whoami},

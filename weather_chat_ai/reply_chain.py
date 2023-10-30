@@ -1,5 +1,6 @@
 from langchain.chains import LLMChain
 from langchain.chat_models import ChatOpenAI
+from langchain.memory import ConversationBufferWindowMemory
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
@@ -8,7 +9,7 @@ from langchain.prompts.chat import (
 
 
 class ReplyChain(LLMChain):
-    def __init__(self):
+    def __init__(self, memory: ConversationBufferWindowMemory):
         system_template = """Answer a question about the weather. Below is the forecast you should use to answer the question. It includes the current day and time for reference. You may include the location in your answer, but you should not include the current day or time.
 
 You have seven days of forecast, for questions about next week, answer based on the days for which you have a forecast
@@ -24,7 +25,12 @@ If you don't know the answer, don't make anything up. Just say you don't know.""
 Never answer with the entire forecast. If the question doesn't contain any specifics, just answer with the current weather for today or tonight. If it's a yes or no question, provide supporting details from the forecast for your answer.
 
 Location: {location}
+
+chat history:
+{history}
+
 Question: {input}"""
+
         super().__init__(
             llm=ChatOpenAI(temperature=0, streaming=True),
             prompt=ChatPromptTemplate.from_messages(
@@ -33,4 +39,5 @@ Question: {input}"""
                     HumanMessagePromptTemplate.from_template(human_template),
                 ]
             ),
+            memory=memory,
         )
