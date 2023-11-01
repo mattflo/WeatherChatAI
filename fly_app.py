@@ -7,6 +7,35 @@ from weather_chat_ai.weather_chat_chain import WeatherChatChain
 logger = structlog.get_logger()
 
 
+async def run_chain(input: str):
+    chain = cl.user_session.get("chain")
+    cb = cl.AsyncLangchainCallbackHandler(
+        stream_final_answer=True,
+    )
+    cb.answer_reached = True
+
+    await chain.acall(
+        input,
+        callbacks=[cb],
+        include_run_info=True,
+    )
+
+
+@cl.action_callback("initial_hints")
+async def on_action(action):
+    input = action.label
+
+    await cl.Message(
+        author="User",
+        content=input,
+        author_is_user=True,
+    ).send()
+
+    await run_chain(input)
+    # the action button can be removed, but we don't want to remove these
+    # await action.remove()
+
+
 @cl.on_chat_start
 async def main():
     try:
@@ -24,18 +53,14 @@ Enter whatever you're comfortable sharing in the chat box below. Please, and man
 
 Don't just get the weather. Ask what you really want to know and let me answer your underlying question.
 
-### 📝 Examples
-
-* `Should I wear a jacket tonight in Denver?`
-* `I'm traveling to Seattle on Monday. Should I bring an umbrella?`
-* `Which day is better for a hike this weekend in Leadville?`
-
 ### ⛔ Limitations
 
 * **Location Unaware** I don't know where you are, so tell me the location you're interested in.
-* **No Memory** I don't currently have memory. Please include the location in every message.
 * **No International Support** I'm powered by the [National Weather Service](https://www.weather.gov/), so I can only answer questions about the United States.
-* **7 Day Forecast** I can only answer questions about the next 7 days."""
+* **7 Day Forecast** I can only answer questions about the next 7 days.
+
+📝 Here are some examples to get you started, or enter whatever you like!
+"""
 
         res = await cl.AskUserMessage(content=email_prompt, timeout=60).send()
         if res:
@@ -43,7 +68,18 @@ Don't just get the weather. Ask what you really want to know and let me answer y
             user_session.set(
                 "chain", WeatherChatChain(whoami=res["content"], session_id=session_id)
             )
-            await cl.Message(content=greeting).send()
+            initial_choices = {
+                "denver": "Should I wear a jacket tonight in Denver?",
+                "seattle": "I'm traveling to Seattle on Monday. Should I bring an umbrella?",
+                "leadville": "Which day is better for a hike this weekend in Leadville?",
+            }
+            actions = [
+                cl.Action(
+                    name="initial_hints", value=choice, label=initial_choices[choice]
+                )
+                for choice in initial_choices
+            ]
+            await cl.Message(content=greeting, actions=actions).send()
     except Exception as e:
         logger.exception("Failed to start chat.")
 
@@ -51,18 +87,7 @@ Don't just get the weather. Ask what you really want to know and let me answer y
 @cl.on_message
 async def main(message: cl.Message):
     try:
-        chain = cl.user_session.get("chain")
-        cb = cl.AsyncLangchainCallbackHandler(
-            stream_final_answer=True,
-        )
-        cb.answer_reached = True
-
-        res = await chain.acall(
-            message.content,
-            callbacks=[cb],
-            include_run_info=True,
-        )
-        logger.info(f"Run id: {res['__run'].run_id}")
+        await run_chain(message.content)
 
     except Exception as e:
         logger.exception("Failed to process message.")
