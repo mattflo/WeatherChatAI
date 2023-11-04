@@ -1,10 +1,33 @@
-import chainlit as cl
+import os
+
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    # Enable performance monitoring
+    enable_tracing=True,
+)
+
+
+import sys
+
 import structlog
+
+if not sys.stderr.isatty():
+    structlog.configure(
+        [
+            structlog.processors.dict_tracebacks,
+            structlog.processors.JSONRenderer(),
+        ]
+    )
+
+
+logger = structlog.get_logger()
+
+import chainlit as cl
 from chainlit import user_session
 
 from weather_chat_ai.weather_chat_chain import WeatherChatChain
-
-logger = structlog.get_logger()
 
 
 async def run_chain(input: str):
@@ -32,22 +55,21 @@ async def on_action(action):
     ).send()
 
     await run_chain(input)
-    # the action button can be removed, but we don't want to remove these
-    # await action.remove()
 
 
-@cl.on_chat_start
-async def main():
-    try:
-        email_prompt = """## First, please share your contact info.
-
-My human supervisors 👥 would love to know who you are and how to get in touch!
-
-**What's your 📪 Email, 🐦 Twitter, ⛓️ Linked In?**
-
-Enter whatever you're comfortable sharing in the chat box below. Please, and many, many thank yous! 🙏"""
-
-        greeting = """🙏 Awesome, let's get started! Below are some helpful hints.
+async def send_intro(whoami):
+    session_id = cl.user_session.get("id")
+    user_session.set("chain", WeatherChatChain(whoami=whoami, session_id=session_id))
+    initial_choices = {
+        "denver": "Should I wear a jacket tonight in Denver?",
+        "seattle": "I'm traveling to Seattle on Monday. Should I bring an umbrella?",
+        "leadville": "Which day is better for a hike this weekend in Leadville?",
+    }
+    actions = [
+        cl.Action(name="initial_hints", value=choice, label=initial_choices[choice])
+        for choice in initial_choices
+    ]
+    greeting = """🙏 Awesome, let's get started! Below are some helpful hints.
 
 ### Answer vs Search
 
@@ -62,24 +84,35 @@ Don't just get the weather. Ask what you really want to know and let me answer y
 📝 Here are some examples to get you started, or enter whatever you like!
 """
 
-        res = await cl.AskUserMessage(content=email_prompt, timeout=60).send()
-        if res:
-            session_id = cl.user_session.get("id")
-            user_session.set(
-                "chain", WeatherChatChain(whoami=res["content"], session_id=session_id)
-            )
-            initial_choices = {
-                "denver": "Should I wear a jacket tonight in Denver?",
-                "seattle": "I'm traveling to Seattle on Monday. Should I bring an umbrella?",
-                "leadville": "Which day is better for a hike this weekend in Leadville?",
-            }
-            actions = [
-                cl.Action(
-                    name="initial_hints", value=choice, label=initial_choices[choice]
-                )
-                for choice in initial_choices
-            ]
-            await cl.Message(content=greeting, actions=actions).send()
+    await cl.Message(content=greeting, actions=actions).send()
+
+
+@cl.on_chat_start
+async def main():
+    try:
+        contact_info_prompt = """## First, please share your contact info.
+
+My human supervisors 👥 would love to know who you are and how to get in touch!
+
+**What's your 📪 Email, 🐦 Twitter, ⛓️ Linked In?**"""
+
+        actions = [
+            cl.Action(name="anon", value="sure", label="Sure!"),
+            cl.Action(name="anon", value="anon", label="I'd prefer not to say"),
+        ]
+
+        answer = await cl.AskActionMessage(
+            content=contact_info_prompt, timeout=60, actions=actions
+        ).send()
+
+        whoami = "Anonymous"
+
+        if answer and "value" in answer and answer["value"] == "sure":
+            ask = "\n\nEnter whatever you're comfortable sharing in the chat box below. Please, and many, many thank yous! 🙏"
+            whoami = await cl.AskUserMessage(content=ask, timeout=60).send()
+
+        if whoami:
+            await send_intro(whoami)
     except Exception as e:
         logger.error("An exception occurred: %s", e, exc_info=True)
 

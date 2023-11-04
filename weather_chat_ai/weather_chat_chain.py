@@ -10,7 +10,7 @@ from weather_chat_ai.reply_chain import ReplyChain
 
 
 class WeatherChatChain(SequentialChain):
-    def __init__(self, whoami="", tags=[], session_id: str = None):
+    def __init__(self, whoami="Anonymous", tags=[], session_id: str = None):
         if session_id is None:
             session_id = str(uuid.uuid4())
 
