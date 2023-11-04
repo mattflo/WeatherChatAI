@@ -64,7 +64,7 @@ class NWSChain(Chain):
             forecast = self.formatted_forecast(tz_name, location, forecast_lines)
             return {"forecast": forecast}
         except Exception as e:
-            logger.exception("Failed to get weather forecast.")
+            logger.error("An exception occurred: %s", e, exc_info=True)
             return {
                 "forecast": f"Sorry, I'm having trouble finding the weather for {location}."
             }
@@ -92,7 +92,7 @@ class NWSChain(Chain):
             forecast = self.formatted_forecast(tz_name, location, forecast_lines)
             return {"forecast": forecast}
         except Exception as e:
-            logger.exception("Failed to get weather forecast.")
+            logger.error("An exception occurred: %s", e, exc_info=True)
             return {
                 "forecast": f"Sorry, I'm having trouble finding the weather for {location}."
             }

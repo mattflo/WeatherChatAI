@@ -81,7 +81,7 @@ Don't just get the weather. Ask what you really want to know and let me answer y
             ]
             await cl.Message(content=greeting, actions=actions).send()
     except Exception as e:
-        logger.exception("Failed to start chat.")
+        logger.error("An exception occurred: %s", e, exc_info=True)
 
 
 @cl.on_message
@@ -90,4 +90,4 @@ async def main(message: cl.Message):
         await run_chain(message.content)
 
     except Exception as e:
-        logger.exception("Failed to process message.")
+        logger.error("An exception occurred: %s", e, exc_info=True)
