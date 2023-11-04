@@ -31,7 +31,7 @@ custom_css = '/public/stylesheet.css'
 default_expand_messages = false
 
 # Hide the chain of thought details from the user in the UI.
-hide_cot = false
+hide_cot = true
 
 # Link to your github repo. This will add a github button in the UI's header.
 github = "https://github.com/mattflo/WeatherChatAI"
