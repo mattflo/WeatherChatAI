@@ -12,7 +12,7 @@ isort:
 ## watch-focus:           run tests in watch mode with focus
 .PHONY watch-focus:
 watch-focus:
-	LANGCHAIN_TRACING_V2=false poetry run ptw -- -- -rP -m focus
+	poetry run ptw -- -- -rP -m focus
 
 ## watch:                 run tests in watch mode
 .PHONY: watch
