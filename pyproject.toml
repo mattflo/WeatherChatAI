@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Matt Florence <matt@mattflo.com>"]
 readme = "README.md"
-packages = [{include = "weather_chat_ai"}]
+packages = [{ include = "weather_chat_ai" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -35,3 +35,6 @@ rich = "^13.6.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+markers = ["focus"]
