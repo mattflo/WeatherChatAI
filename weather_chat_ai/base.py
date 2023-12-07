@@ -1,20 +1,16 @@
-from weather_chat_ai.runnables import MergeKeys, WrapWithKey
-from weather_chat_ai.location_chain import LocationChain
-from weather_chat_ai.nws_chain import NWSChain
-from weather_chat_ai.reply_chain import ReplyChain
-
+import os
+import uuid
+from typing import Optional
 
 from langchain.memory import ConversationBufferWindowMemory, PostgresChatMessageHistory
 from langchain.schema.runnable.base import RunnableSequence
 from langchain_core.runnables.config import RunnableConfig
-from langchain_core.runnables.utils import (
-    Input,
-    Output,
-)
+from langchain_core.runnables.utils import Input, Output
 
-import os
-import uuid
-from typing import Optional
+from weather_chat_ai.location_chain import LocationChain
+from weather_chat_ai.nws_chain import NWSChain
+from weather_chat_ai.reply_chain import ReplyChain
+from weather_chat_ai.with_memory import WithMemory
 
 
 class WeatherChatAIChain(RunnableSequence):
@@ -33,8 +29,7 @@ class WeatherChatAIChain(RunnableSequence):
         reply_chain = ReplyChain(memory)
 
         runnables = [
-            WrapWithKey("input"),
-            MergeKeys(memory.load_memory_variables),
+            WithMemory(memory),
             LocationChain().with_retry(),
             NWSChain().with_retry(),
             reply_chain.with_retry(),

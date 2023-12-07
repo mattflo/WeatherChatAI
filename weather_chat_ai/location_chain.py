@@ -1,6 +1,5 @@
 from langchain.chains import LLMChain
 from langchain.llms import OpenAI
-from langchain.memory import ConversationBufferWindowMemory
 from langchain.prompts import PromptTemplate
 
 
