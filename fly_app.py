@@ -26,22 +26,23 @@ logger = structlog.get_logger()
 
 import chainlit as cl
 from chainlit import user_session
+from langchain_core.runnables.config import RunnableConfig
 
-from weather_chat_ai.weather_chat_chain import WeatherChatChain
+from weather_chat_ai.base import WeatherChatAI
 
 
 async def run_chain(input: str):
     chain = cl.user_session.get("chain")
-    cb = cl.AsyncLangchainCallbackHandler(
-        stream_final_answer=True,
-    )
-    cb.answer_reached = True
 
-    await chain.acall(
-        input,
-        callbacks=[cb],
-        include_run_info=True,
-    )
+    cb = cl.AsyncLangchainCallbackHandler()
+
+    msg = cl.Message(content="")
+
+    async for chunk in chain.astream(
+        {"input": input},
+        config=RunnableConfig(callbacks=[cb]),
+    ):
+        await msg.stream_token(chunk.content)
 
 
 @cl.action_callback("initial_hints")
@@ -59,7 +60,7 @@ async def on_action(action):
 
 async def send_intro(whoami):
     session_id = cl.user_session.get("id")
-    user_session.set("chain", WeatherChatChain(whoami=whoami, session_id=session_id))
+    user_session.set("chain", WeatherChatAI(whoami=whoami, session_id=session_id))
     initial_choices = {
         "denver": "Should I wear a jacket tonight in Denver?",
         "seattle": "I'm traveling to Seattle on Monday. Should I bring an umbrella?",
@@ -105,14 +106,14 @@ My human supervisors 👥 would love to know who you are and how to get in touch
             content=contact_info_prompt, timeout=60, actions=actions
         ).send()
 
-        whoami = "Anonymous"
+        whoami = {"content": "Anonymous"}
 
         if answer and "value" in answer and answer["value"] == "sure":
             ask = "\n\nEnter whatever you're comfortable sharing in the chat box below. Please, and many, many thank yous! 🙏"
             whoami = await cl.AskUserMessage(content=ask, timeout=60).send()
 
-        if whoami:
-            await send_intro(whoami)
+        if answer and whoami:
+            await send_intro(whoami["content"])
     except Exception as e:
         logger.error("An exception occurred: %s", e, exc_info=True)
 
