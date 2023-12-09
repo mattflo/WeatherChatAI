@@ -51,6 +51,7 @@ class WeatherChatAI(RunnableSequence):
             WithHistory(memory),
             location_chain.with_retry(),
             NWSChain().with_retry(),
+            # this is a runnable sequence instead of a chain to enable streaming more easily
             reply_chain,
         ]
 
