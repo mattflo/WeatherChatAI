@@ -15,7 +15,7 @@ weather request: {input}
 Location:"""
 
         super().__init__(
-            llm=OpenAI(),
+            llm=OpenAI(model="gpt-3.5-turbo-instruct"),
             prompt=PromptTemplate.from_template(location_template),
             output_key="location",
         )
