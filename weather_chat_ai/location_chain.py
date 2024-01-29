@@ -1,6 +1,7 @@
 from langchain.chains import LLMChain
-from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
+
+from weather_chat_ai.models import TogetherCompletion
 
 
 class LocationChain(LLMChain):
@@ -12,10 +13,10 @@ chat history:
 
 weather request: {input}
 
-Location:"""
+Location in cty, st format:"""
 
         super().__init__(
-            llm=OpenAI(model="gpt-3.5-turbo-instruct"),
+            llm=TogetherCompletion(),
             prompt=PromptTemplate.from_template(location_template),
             output_key="location",
         )

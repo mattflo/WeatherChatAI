@@ -1,10 +1,11 @@
-from langchain.chat_models import ChatOpenAI
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
     SystemMessagePromptTemplate,
 )
 from langchain.schema.runnable.base import RunnableSequence
+
+from weather_chat_ai.models import TogetherChat
 
 
 class ReplyChain(RunnableSequence):
@@ -30,6 +31,10 @@ chat history:
 
 Question: {input}"""
 
+        llm = TogetherChat(
+            metadata={"name": self.__class__.__name__},
+        )
+
         super().__init__(
             first=ChatPromptTemplate.from_messages(
                 [
@@ -37,8 +42,5 @@ Question: {input}"""
                     HumanMessagePromptTemplate.from_template(human_template),
                 ]
             ),
-            last=ChatOpenAI(
-                temperature=0,
-                metadata={"name": self.__class__.__name__},
-            ),
+            last=llm,
         )
