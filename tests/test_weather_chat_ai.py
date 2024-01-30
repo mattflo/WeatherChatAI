@@ -30,7 +30,7 @@ def assert_answer(answer, location_assertion):
     assert "breckenridge" in answer.lower(), location_assertion
 
 
-@pytest.mark.focus
+# @pytest.mark.focus
 def test_invoke_with_memory(chain, inputs):
     for input, location_assertion in inputs:
         answer = chain.invoke(

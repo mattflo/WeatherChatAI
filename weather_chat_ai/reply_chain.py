@@ -31,10 +31,6 @@ chat history:
 
 Question: {input}"""
 
-        llm = TogetherChat(
-            metadata={"name": self.__class__.__name__},
-        )
-
         super().__init__(
             first=ChatPromptTemplate.from_messages(
                 [
@@ -42,5 +38,7 @@ Question: {input}"""
                     HumanMessagePromptTemplate.from_template(human_template),
                 ]
             ),
-            last=llm,
+            last=TogetherChat(
+                metadata={"name": self.__class__.__name__},
+            ),
         )

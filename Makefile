@@ -12,12 +12,12 @@ isort:
 ## watch-focus:           run tests in watch mode with focus
 .PHONY watch-focus:
 watch-focus:
-	poetry run ptw -- -- -rP -m focus
+	poetry run ptw -- -- -rP -x -m focus
 
 ## watch:                 run tests in watch mode
 .PHONY: watch
 watch:
-	poetry run ptw -- -- -rP
+	poetry run ptw -- -- -rP -x
 
 ## test:                  run tests
 .PHONY: test
