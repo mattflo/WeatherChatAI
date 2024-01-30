@@ -2,7 +2,7 @@ import os
 import uuid
 from typing import Any, AsyncIterator, Iterator, Optional, cast
 
-from langchain.memory import ConversationBufferWindowMemory, PostgresChatMessageHistory
+from langchain.memory import ConversationBufferWindowMemory
 from langchain.schema.runnable.base import RunnableSequence
 from langchain_core.load.dump import dumpd
 from langchain_core.runnables.config import (
@@ -34,13 +34,7 @@ class WeatherChatAI(RunnableSequence):
         if session_id is None:
             session_id = str(uuid.uuid4())
 
-        history = PostgresChatMessageHistory(
-            connection_string=os.getenv("DATABASE_URL"),
-            session_id=session_id,
-        )
-
         memory = ConversationBufferWindowMemory(
-            chat_memory=history,
             input_key="input",
         )
 
