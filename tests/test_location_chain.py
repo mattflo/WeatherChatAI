@@ -86,7 +86,7 @@ test_samples = [
 ]
 
 
-# @pytest.mark.focus
+@pytest.mark.focus
 @pytest.mark.parametrize("test", test_samples)
 def test_location_chain(test):
     chain = LocationChain()
@@ -96,6 +96,8 @@ def test_location_chain(test):
 
     res = chain.invoke({"input": query, "history": ""})
 
-    location = res["location"]
+    location = res["location"].strip(" \n")
 
-    assert location == expected, f"Expected {expected} for query: {query}"
+    assert (
+        location == expected
+    ), f"Expected {expected}, but got {location} for query: {query}"

@@ -5,7 +5,7 @@ from langchain.prompts.chat import (
 )
 from langchain.schema.runnable.base import RunnableSequence
 
-from weather_chat_ai.models import TogetherChat
+from weather_chat_ai.models import *
 
 
 class ReplyChain(RunnableSequence):
@@ -38,7 +38,7 @@ Question: {input}"""
                     HumanMessagePromptTemplate.from_template(human_template),
                 ]
             ),
-            last=TogetherChat(
+            last=FireworksChat(
                 metadata={"name": self.__class__.__name__},
             ),
         )

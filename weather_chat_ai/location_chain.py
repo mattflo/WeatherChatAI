@@ -1,7 +1,14 @@
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 
-from weather_chat_ai.models import TogetherCompletion
+from weather_chat_ai.models import *
+
+
+class StrOutputStripper(StrOutputParser):
+    def parse(self, text: str) -> str:
+        """Returns the input text with no changes."""
+        return text.strip(" \n*\"'").split("\n")[0].strip(" .")
 
 
 class LocationChain(LLMChain):
@@ -18,7 +25,8 @@ Only answer with the city and state in the following format: City, ST
 Answer:"""
 
         super().__init__(
-            llm=TogetherCompletion(),
+            llm=FireworksCompletion(),
             prompt=PromptTemplate.from_template(location_template),
             output_key="location",
+            output_parser=StrOutputStripper(),
         )
