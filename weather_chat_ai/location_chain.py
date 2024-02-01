@@ -8,7 +8,7 @@ from weather_chat_ai.models import *
 class StrOutputStripper(StrOutputParser):
     def parse(self, text: str) -> str:
         """Returns the input text with no changes."""
-        return text.strip(" \n*\"'").split("\n")[0].strip(" .")
+        return text.strip(" \n*\"'-").split("\n")[0].strip(" .")
 
 
 class LocationChain(LLMChain):

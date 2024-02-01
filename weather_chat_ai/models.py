@@ -49,10 +49,17 @@ class MistralAIChat(ChatMistralAI):
         super().__init__(**defaults)
 
 
+class FireworksModels:
+    mistral_7b = "accounts/fireworks/models/mistral-7b"
+    mistral_7b_instruct = "accounts/fireworks/models/mistral-7b-instruct-4k"
+    mixtral_8x7b = "accounts/fireworks/models/mixtral-8x7b"
+    mixtral_8x7b_instruct = "accounts/fireworks/models/mixtral-8x7b-instruct"
+
+
 class FireworksChat(ChatOpenAI):
     def __init__(self, **kwargs):
         defaults = to_dict(
-            model="accounts/fireworks/models/mixtral-8x7b-instruct",
+            model=FireworksModels.mixtral_8x7b_instruct,
             openai_api_key=os.environ["FIREWORKS_API_KEY"],
             openai_api_base="https://api.fireworks.ai/inference/v1",
             **open_ai_defaults,
@@ -64,7 +71,7 @@ class FireworksChat(ChatOpenAI):
 class FireworksCompletion(Fireworks):
     def __init__(self, **kwargs):
         defaults = to_dict(
-            model="accounts/fireworks/models/mixtral-8x7b-instruct",
+            model=FireworksModels.mixtral_8x7b_instruct,
             model_kwargs={"max_tokens": 10},
             **open_ai_defaults,
         )
