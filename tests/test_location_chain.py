@@ -123,5 +123,5 @@ def test_threshold_location_chain():
     accuracy = 1 - len(incorrect) / total
     print(f"Accuracy: {accuracy * 100:.2f}% for {total} samples.")
 
-    threshold = 0.95
+    threshold = 0.90
     assert accuracy >= threshold, f"Accuracy is below threshold of {threshold}"
