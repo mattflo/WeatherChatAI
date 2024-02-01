@@ -30,7 +30,7 @@ def assert_answer(answer, location_assertion):
     assert "breckenridge" in answer.lower(), location_assertion
 
 
-@pytest.mark.focus
+# @pytest.mark.focus
 def test_invoke_with_memory(chain, inputs):
     for input, location_assertion in inputs:
         answer = chain.invoke(
@@ -40,8 +40,8 @@ def test_invoke_with_memory(chain, inputs):
         assert_answer(answer, location_assertion)
 
 
-@pytest.mark.asyncio
 # @pytest.mark.focus
+@pytest.mark.asyncio
 async def test_ainvoke_with_memory(chain, inputs):
     for input, location_assertion in inputs:
         result = await chain.ainvoke(
@@ -64,8 +64,8 @@ def test_stream_with_memory(chain, inputs):
         assert_answer(answer, location_assertion)
 
 
-@pytest.mark.asyncio
 # @pytest.mark.focus
+@pytest.mark.asyncio
 async def test_astream_with_memory(chain, inputs):
     for input, location_assertion in inputs:
         answer = ""

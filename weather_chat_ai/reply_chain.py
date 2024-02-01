@@ -1,10 +1,11 @@
-from langchain.chat_models import ChatOpenAI
 from langchain.prompts.chat import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
     SystemMessagePromptTemplate,
 )
 from langchain.schema.runnable.base import RunnableSequence
+
+from weather_chat_ai.models import *
 
 
 class ReplyChain(RunnableSequence):
@@ -37,8 +38,7 @@ Question: {input}"""
                     HumanMessagePromptTemplate.from_template(human_template),
                 ]
             ),
-            last=ChatOpenAI(
-                temperature=0,
+            last=FireworksChat(
                 metadata={"name": self.__class__.__name__},
             ),
         )
