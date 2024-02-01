@@ -1,9 +1,9 @@
 import os
 
 from langchain.chat_models import ChatOpenAI
-from langchain_mistralai.chat_models import ChatMistralAI
-from langchain_community.llms.openai import OpenAI
 from langchain_community.llms.fireworks import Fireworks
+from langchain_community.llms.openai import OpenAI
+from langchain_mistralai.chat_models import ChatMistralAI
 from langchain_together import Together
 
 defaults = {"temperature": 0}

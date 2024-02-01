@@ -1,4 +1,5 @@
 from pprint import pprint
+
 import pytest
 
 from weather_chat_ai.location_chain import LocationChain
