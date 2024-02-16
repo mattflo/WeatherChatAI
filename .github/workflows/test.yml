@@ -16,7 +16,6 @@ jobs:
       LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
       FIREWORKS_API_KEY: ${{ secrets.FIREWORKS_API_KEY }}
       LANGCHAIN_TRACING_V2: true
-      LANGCHAIN_ENDPOINT: https://api.smith.langchain.com
       LANGCHAIN_PROJECT: wai-ga
 
     runs-on: ubuntu-latest
