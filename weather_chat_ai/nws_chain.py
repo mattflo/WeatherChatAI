@@ -1,5 +1,4 @@
 import json
-import os
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -12,7 +11,8 @@ from langchain.callbacks.manager import (
     CallbackManagerForChainRun,
 )
 from langchain.chains.base import Chain
-from serpapi import GoogleSearch
+
+from weather_chat_ai.nominatim import get_lat_lon
 
 DAYS = [
     "Monday",
@@ -27,7 +27,7 @@ DAYS = [
 FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
 
-logger = structlog.get_logger()
+logger = structlog.get_logger(__name__)
 
 
 class NWSChain(Chain):
@@ -52,8 +52,7 @@ class NWSChain(Chain):
         try:
             logger.info(f"Retrieving forecast for: {location}")
 
-            google_maps_response = self.fetch_google_maps(location)
-            lat, lon = self.extract_lat_lon(google_maps_response)
+            lat, lon = get_lat_lon(location)
 
             gridpoints = self.fetch_nws_gridpoints(lat, lon)
             tz_name, forecast_url = self.extract_tz_and_forecast_url(gridpoints)
@@ -80,8 +79,7 @@ class NWSChain(Chain):
         try:
             logger.info(f"Retrieving forecast for: {location}")
 
-            google_maps_response = self.fetch_google_maps(location)
-            lat, lon = self.extract_lat_lon(google_maps_response)
+            lat, lon = get_lat_lon(location)
 
             gridpoints = await self.afetch_nws_gridpoints(lat, lon)
             tz_name, forecast_url = self.extract_tz_and_forecast_url(gridpoints)
@@ -136,33 +134,10 @@ class NWSChain(Chain):
         logger.info(f"Found {len(periods)} forecast periods.")
         return [f"{p['name']}: {p['detailedForecast']}" for p in periods]
 
-    def fetch_google_maps(self, location: str) -> Dict[str, Any]:
-        """Search google maps for a given location using SerpApi."""
-        search = GoogleSearch(
-            {
-                "engine": "google_maps",
-                "q": location,
-                "num_hits": 1,
-                "api_key": os.environ["SERPAPI_API_KEY"],
-            }
-        )
-        return search.get_dict()
-
-    def extract_lat_lon(
-        self,
-        google_maps_response: Dict[str, Any],
-    ) -> Tuple[float, float]:
-        """Get the latitude and longitude for a given location from google maps response."""
-        gps = google_maps_response["place_results"]["gps_coordinates"]
-        lat = gps["latitude"]
-        lon = gps["longitude"]
-        logger.info(f"Found lat/lon: {lat}, {lon}")
-        return (lat, lon)
-
     def fetch_nws_gridpoints(
         self,
-        lat: float,
-        lon: float,
+        lat: str,
+        lon: str,
     ) -> Dict[str, Any]:
         """Get the gridpoints from the NWS API for a given latitude and longitude."""
         resp = requests.get(f"{self.gridpoints_url}{lat},{lon}")
@@ -170,8 +145,8 @@ class NWSChain(Chain):
 
     async def afetch_nws_gridpoints(
         self,
-        lat: float,
-        lon: float,
+        lat: str,
+        lon: str,
     ) -> Dict[str, Any]:
         """Get the gridpoints from the NWS API for a given latitude and longitude."""
         async with aiohttp.ClientSession() as session:
@@ -201,9 +176,9 @@ class NWSChain(Chain):
             day_label = DAYS[(current_day_of_week_index + 1 + index) % 7]
             forecast[index * 2 + 2] = f"{day_label}, {date}: {row.split(': ', 1)[1]}"
             next_row = forecast[index * 2 + 3]
-            forecast[
-                index * 2 + 3
-            ] = f"{day_label} Night, {date}: {next_row.split(': ', 1)[1]}"
+            forecast[index * 2 + 3] = (
+                f"{day_label} Night, {date}: {next_row.split(': ', 1)[1]}"
+            )
         return forecast
 
     def get_current_day_and_time(

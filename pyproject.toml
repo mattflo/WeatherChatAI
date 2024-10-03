@@ -10,7 +10,6 @@ packages = [{ include = "weather_chat_ai" }]
 python = "^3.10"
 langchain = "~0.0.0"
 chainlit = "~0"
-google-search-results = "^2.4.2"
 pytz = "^2023.3"
 openai = "^0.27.9"
 structlog = "^23.2.0"

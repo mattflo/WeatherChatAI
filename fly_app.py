@@ -22,7 +22,7 @@ if not sys.stderr.isatty():
     )
 
 
-logger = structlog.get_logger()
+logger = structlog.get_logger(__name__)
 
 import chainlit as cl
 from chainlit import user_session

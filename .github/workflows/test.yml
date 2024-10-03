@@ -4,15 +4,14 @@ on:
   push:
     branches:
       - main
-      - '*'
+      - "*"
   schedule:
-    - cron: '58 11 * * *'
+    - cron: "58 11 * * *"
 
 jobs:
   build:
     env:
       TOGETHER_API_KEY: ${{ secrets.TOGETHER_API_KEY }}
-      SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
       LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
       FIREWORKS_API_KEY: ${{ secrets.FIREWORKS_API_KEY }}
       LANGCHAIN_TRACING_V2: true
@@ -21,19 +20,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up python
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3.11
+      - name: Set up python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
 
-    - name: Install poetry
-      uses: snok/install-poetry@v1
+      - name: Install poetry
+        uses: snok/install-poetry@v1
 
-    - name: Install dependencies
-      run: poetry install --no-interaction
+      - name: Install dependencies
+        run: poetry install --no-interaction
 
-    - name: Run pytest
-      run: |
-        poetry run pytest -rP
+      - name: Run pytest
+        run: |
+          poetry run pytest -rP

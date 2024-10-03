@@ -6,7 +6,7 @@ Live Demo: https://weather-chat-ai.fly.dev/
 
 ## ☀️ Conversational Weather 💦
 
-There are dozens of weather APIs out there. But most of them aren't well suited to chat over. They are made for computers 🖥️ to consume, not LLMs 🧠. Then I realized the old-school  🏫 🇺🇸 [National Weather Service](https://www.weather.gov/) text based forecast would be perfect.
+There are dozens of weather APIs out there. But most of them aren't well suited to chat over. They are made for computers 🖥️ to consume, not LLMs 🧠. Then I realized the old-school 🏫 🇺🇸 [National Weather Service](https://www.weather.gov/) text based forecast would be perfect.
 
 ## 👥 Who is this for?
 
@@ -34,18 +34,19 @@ WeatherChatAI is also built to help users learn how to leverage 💪 new AI-base
 
 1. Ask a weather related question.
 
-    `Should I wear a jacket tonight in Denver?`
+   `Should I wear a jacket tonight in Denver?`
 
 1. An LLMChain coerces the location of the request into City, ST format. If no location was provided in the question, it defaults to Denver, CO.
-1. Call SerpApi for the location to get the lat/lon.
+1. Call [Nominatim](https://nominatim.org/release-docs/develop/api/Overview/) for the location to get the lat/lon.
 1. Call NWS `points` endpoint to find the NWS grid and timezone.
 1. Call NWS `gridpoints` endpoint to get the forecast.
 1. The labels for each day in the forecast are normalized to remove holiday names and dates are also added for additional context.
 1. A conversational LLM makes a reply based on the
-    * question
-    * forecast
-    * current day of the week
-    * local time using the timezone retrieved from the call above
+   - question
+   - forecast
+   - current day of the week
+   - local time using the timezone retrieved from the call above
+
 ```
 Answer a question about the weather. Below is the forecast you should use to answer the question. It includes the current day and time for reference. You may include the location in your answer, but you should not include the current day or time. If you don't know the answer, don't make anything up. Just say you don't know.
 
@@ -76,10 +77,9 @@ Yes, you should wear a jacket tonight in Denver. The forecast indicates a low ar
 
 ## ✔️ Prerequisites
 
-* python3 - tested with 3.10
-* [poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
-* [OpenAI](https://openai.com/) API key
-* [SerpApi](https://serpapi.com/) API key
+- python3 - tested with 3.10
+- [poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
+- [OpenAI](https://openai.com/) API key
 
 ## 🚀 Setup
 
@@ -96,7 +96,7 @@ poetry install
 cp .env.example .env
 ```
 
-Add your open api and serpapi keys to `.env`. See [.env.example](.env.example)
+Add your open ai and fireworks api keys to `.env`. See [.env.example](.env.example)
 
 ```
 make chainlit
