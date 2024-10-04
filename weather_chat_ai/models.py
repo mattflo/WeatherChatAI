@@ -54,12 +54,13 @@ class FireworksModels:
     mistral_7b_instruct = "accounts/fireworks/models/mistral-7b-instruct-4k"
     mixtral_8x7b = "accounts/fireworks/models/mixtral-8x7b"
     mixtral_8x7b_instruct = "accounts/fireworks/models/mixtral-8x7b-instruct"
+    llama3p2_3b = "accounts/fireworks/models/llama-v3p2-3b-instruct"
 
 
 class FireworksChat(ChatOpenAI):
     def __init__(self, **kwargs):
         defaults = to_dict(
-            model=FireworksModels.mixtral_8x7b_instruct,
+            model=FireworksModels.llama3p2_3b,
             openai_api_key=os.environ["FIREWORKS_API_KEY"],
             openai_api_base="https://api.fireworks.ai/inference/v1",
             **open_ai_defaults,
