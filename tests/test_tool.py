@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from weather_chat_ai.nws_chain import NWSChain
+from weather_chat_ai.tool import normalize_forecast_days
 
 
 def test_day_name_normalization():
@@ -21,12 +21,7 @@ def test_day_name_normalization():
         "Saturday Night: A slight chance of showers and thunderstorms before midnight. Partly cloudy, with a low around 48.",
     ]
 
-    chain = NWSChain()
-    normalized_forecast = chain.normalize_forecast_days(forecast, datetime(2023, 7, 2))
-
-    # for f in normalized_forecast:
-    #     print(f)
-    # assert False
+    normalized_forecast = normalize_forecast_days(forecast, datetime(2023, 7, 2))
 
     assert (
         "Tuesday, July 04: A chance of showers and thunderstorms after noon. Partly sunny, with a high near 74. Southeast wind 7 to 15 mph, with gusts as high as 24 mph. Chance of precipitation is 50%."

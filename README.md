@@ -1,34 +1,32 @@
 # ☁️ ❄️ ⚡ Weather Chat AI ⛅ 🌡️ ☂️
 
-☁️ ❄️ ⚡ Don't just get the weather. Get the answer to your underlying weather-related question. Using retrieval augmented generation with LangChain, OpenAI, the National Weather Service, and Chainlit. ⛅ 🌡️ ☂️
+☁️ ❄️ ⚡ Don't just get the weather. Get the answer to your underlying weather-related question. Using retrieval augmented generation with LangGraph, OpenAI, the National Weather Service, and Chainlit. ⛅ 🌡️ ☂️
 
 Live Demo: https://weather-chat-ai.fly.dev/
-
-## ☀️ Conversational Weather 💦
-
-There are dozens of weather APIs out there. But most of them aren't well suited to chat over. They are made for computers 🖥️ to consume, not LLMs 🧠. Then I realized the old-school 🏫 🇺🇸 [National Weather Service](https://www.weather.gov/) text based forecast would be perfect.
 
 ## 👥 Who is this for?
 
 WeatherChatAI is built for a couple different audiences:
 
-First, it's for anyone who wants to learn how to 🛠️ build LLM applications. Multiple LLM calls have to be composed together into a chain to build anything more interesting than Hello World. This project is a simple example of how to do that with [LangChain](https://github.com/langchain-ai/langchain).
+First, it's for anyone who wants to learn how to 🛠️ build LLM applications. It's easier than ever to get started. Both models and tooling have progressed significantly since the initial version of this in July 2023. Simple agents built with [LangGraph](https://www.langchain.com/langgraph) just work out of the box. The forecast is massaged to make it more useful to the LLM, but as models improve, perhaps even this will become unnecessary.
 
-WeatherChatAI is also built to help users learn how to leverage 💪 new AI-based tools. Increasingly, our world is shifting from the search engine to the answer engine paradigm. The next phase in this incremental journey that is already well underway is a shift toward action engines. The more time we save on the small things of everyday life, like answering our weather-related questions, will snowball making us all more productive.
+WeatherChatAI is also built to help users learn how to leverage 💪 new AI-based tools. Our world is shifting paradigms from search engine to answer engine. The next phase in this incremental journey is well underway - a shift toward action engines. We will all become more productive as we begin to save time on the small things of everyday life, like getting answers to our weather-related questions.
 
 ## 📝 Examples
 
 > User: Is tomorrow a good day to mow the yard in Boston?
 
-> Weather Chat AI: Based on the forecast for tomorrow in Boston, it is not the best day to mow the yard. There is a chance of rain showers and thunderstorms throughout the day, with a 60% chance of precipitation. Additionally, there is a chance of showers and thunderstorms likely in the afternoon. It would be better to choose a day with more favorable weather conditions for mowing the yard.
+> Weather Chat AI: Tomorrow in Boston, the weather is expected to be sunny with a high near 66°F. However, rain showers are likely to start after midnight, which means the ground may be wet in the morning.
+
+Considering these conditions, it might be a good day to mow the yard in the afternoon if the ground is not too wet. Just be cautious of the rain starting later in the night.
 
 > User: Is today a good day for a walk in Dallas?
 
-> Weather Chat AI: Today in Dallas, there is a chance of showers and thunderstorms, with temperatures reaching a high of around 95 degrees. The heat index values could be as high as 104. It may not be the most ideal day for a walk due to the potential for rain and the high temperatures.
+> Weather Chat AI: Today in Dallas, the weather is sunny with a high near 92°F. The winds are light, which makes it a pleasant day for a walk. Enjoy your time outdoors!
 
-> User: I'm traveling to Seattle on July 5. Should I bring an umbrella?
+> User: I'm traveling to Seattle on October 7th. Should I bring an umbrella?
 
-> Weather Chat AI: No, you should not bring an umbrella when traveling to Seattle on July 5. The forecast for that day is sunny with a high near 82 degrees.
+> Weather Chat AI: On October 7th in Seattle, there is a 30% chance of rain in the afternoon, increasing to a 60% chance at night. With the likelihood of rain later in the day, it would be a good idea to bring an umbrella.
 
 ## ⚙️ How it works
 
@@ -36,48 +34,43 @@ WeatherChatAI is also built to help users learn how to leverage 💪 new AI-base
 
    `Should I wear a jacket tonight in Denver?`
 
-1. An LLMChain coerces the location of the request into City, ST format. If no location was provided in the question, it defaults to Denver, CO.
-1. Call [Nominatim](https://nominatim.org/release-docs/develop/api/Overview/) for the location to get the lat/lon.
-1. Call NWS `points` endpoint to find the NWS grid and timezone.
-1. Call NWS `gridpoints` endpoint to get the forecast.
-1. The labels for each day in the forecast are normalized to remove holiday names and dates are also added for additional context.
-1. A conversational LLM makes a reply based on the
-   - question
+1. Based on the latest message, and the chat history, the agent decides what to search the weather tool for.
+1. Deterministic code in the tool calls [Nominatim](https://nominatim.org/release-docs/develop/api/Overview/) to get the lat/lon.
+1. Deterministic code in the tool calls NWS `points` endpoint to find the NWS grid and timezone.
+1. Deterministic code in the tool calls NWS `gridpoints` endpoint to get the forecast.
+1. Deterministic code cleans and normalizes the forecast for better augmentation of the LLM.
+1. The LLM makes a reply based on the
+   - original question
+   - chat history
    - forecast
    - current day of the week
    - local time using the timezone retrieved from the call above
 
-```
-Answer a question about the weather. Below is the forecast you should use to answer the question. It includes the current day and time for reference. You may include the location in your answer, but you should not include the current day or time. If you don't know the answer, don't make anything up. Just say you don't know.
+### Example Normalized Forecast
 
-The current day and local time in Denver, CO is Friday, June 30, 04:45 PM
+```
+The current day and local time in Seattle, WA is Saturday, October 05, 10:12 AM
 
 Forecast:
-This Afternoon: Showers and thunderstorms likely. Mostly cloudy. High near 73, with temperatures falling to around 70 in the afternoon. North northeast wind around 10 mph, with gusts as high as 16 mph. Chance of precipitation is 60%. New rainfall amounts between a tenth and quarter of an inch possible.
-Tonight: A chance of showers and thunderstorms before 9pm. Partly cloudy, with a low around 53. West northwest wind 3 to 9 mph. Chance of precipitation is 30%.
-Saturday, July 01: Sunny, with a high near 79. North wind 3 to 13 mph, with gusts as high as 21 mph.
-Saturday Night, July 01: Mostly clear, with a low around 58. South wind 5 to 9 mph.
-Sunday, July 02: Mostly sunny, with a high near 88. North northeast wind 5 to 12 mph, with gusts as high as 18 mph.
-Sunday Night, July 02: Mostly clear, with a low around 59.
-Monday, July 03: Sunny, with a high near 92.
-Monday Night, July 03: Partly cloudy, with a low around 61.
-Tuesday, July 04: A chance of showers and thunderstorms after noon. Mostly sunny, with a high near 88.
-Tuesday Night, July 04: A chance of showers and thunderstorms before midnight. Partly cloudy, with a low around 59.
-Wednesday, July 05: A chance of showers and thunderstorms after noon. Partly sunny, with a high near 76.
-Wednesday Night, July 05: A chance of showers and thunderstorms. Mostly cloudy, with a low around 58.
-Thursday, July 06: A chance of showers and thunderstorms after noon. Partly sunny, with a high near 80.
-Thursday Night, July 06: A chance of showers and thunderstorms before midnight. Partly cloudy, with a low around 58.
-
-Never answer with the entire forecast. If the question doesn't contain any specifics, just answer with the current weather for today or tonight. If it's a yes or no question, provide supporting details from the forecast for your answer.
-
-Location: Denver, CO
-Question: Should I wear a jacket tonight in Denver?
-Yes, you should wear a jacket tonight in Denver. The forecast indicates a low around 53 degrees with a west northwest wind of 3 to 9 mph.
+Today: Patchy fog before 11am. Mostly sunny, with a high near 64. West northwest wind 1 to 7 mph.
+Tonight: Partly cloudy. Low around 48, with temperatures rising to around 50 overnight. North northeast wind 2 to 7 mph.
+Sunday, October 06: Mostly sunny, with a high near 68. Southeast wind around 3 mph.
+Sunday Night, October 06: Mostly clear, with a low around 49. South southeast wind around 3 mph.
+Monday, October 07: A chance of rain after 5pm. Mostly sunny, with a high near 71. South wind 2 to 6 mph. Chance of precipitation is 30%.
+Monday Night, October 07: Rain likely. Mostly cloudy, with a low around 57. Chance of precipitation is 60%. New rainfall amounts less than a tenth of an inch possible.
+Tuesday, October 08: Rain likely. Mostly cloudy, with a high near 67. Chance of precipitation is 60%.
+Tuesday Night, October 08: A chance of rain. Mostly cloudy, with a low around 55.
+Wednesday, October 09: A chance of rain. Mostly cloudy, with a high near 65.
+Wednesday Night, October 09: A chance of rain. Mostly cloudy, with a low around 53.
+Thursday, October 10: A chance of rain. Mostly cloudy, with a high near 62.
+Thursday Night, October 10: A chance of rain. Mostly cloudy, with a low around 50.
+Friday, October 11: A chance of rain. Mostly cloudy, with a high near 61.
+Friday Night, October 11: A chance of rain. Mostly cloudy, with a low around 50.
 ```
 
 ## ✔️ Prerequisites
 
-- python3 - tested with 3.10
+- python3 - tested with 3.11.10
 - [poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
 - [OpenAI](https://openai.com/) API key
 
@@ -96,7 +89,7 @@ poetry install
 cp .env.example .env
 ```
 
-Add your open ai and fireworks api keys to `.env`. See [.env.example](.env.example)
+Add your open ai api key to `.env`. See [.env.example](.env.example)
 
 ```
 make chainlit
@@ -104,5 +97,6 @@ make chainlit
 
 ## 🧭 Roadmap
 
-- [] International Support
-- [] Experiment with OSS alternatives to OpenAI
+- [x] Use LangGraph agent
+- [ ] International Support
+- [ ] Experiment with OSS alternatives to OpenAI
