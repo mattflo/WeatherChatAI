@@ -1,6 +1,6 @@
 # ☁️ ❄️ ⚡ Weather Chat AI ⛅ 🌡️ ☂️
 
-☁️ ❄️ ⚡ Don't just get the weather. Get the answer to your underlying weather-related question. Using retrieval augmented generation with LangGraph, OpenAI, the National Weather Service, and Chainlit. ⛅ 🌡️ ☂️
+☁️ ❄️ ⚡ Don't just get the weather. Get the answer to your underlying weather-related question. Using retrieval augmented generation with LangGraph, OpenAI, the National Weather Service, and Streamlit. ⛅ 🌡️ ☂️
 
 Live Demo: https://weather-chat-ai.fly.dev/
 
@@ -92,7 +92,7 @@ cp .env.example .env
 Add your open ai api key to `.env`. See [.env.example](.env.example)
 
 ```
-make chainlit
+make streamlit
 ```
 
 ## 🧭 Roadmap
