@@ -34,6 +34,11 @@ chainlit:
 fly-chainlit:
 	poetry run chainlit run fly_app.py -w
 
+## streamlit:              run the app
+.PHONY: streamlit
+streamlit:
+	poetry run streamlit run streamlit_app.py
+
 ## lint:                  run linters
 .PHONY: lint
 lint:
@@ -46,11 +51,6 @@ lint:
 format:
 	poetry run black .
 	poetry run ruff --select I --fix .
-
-## doctest:               run doctests
-.PHONY: doctest
-doctest:
-	python -m doctest weather_chat_ai/nws_chain.py
 
 ## deploy:                deploy to fly.io
 deploy:

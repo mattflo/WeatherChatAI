@@ -1,6 +1,9 @@
 import os
+from typing import List
 
 import sentry_sdk
+
+from weather_chat_ai.weather_graph_agent import WeatherGraphAgent
 
 sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN"),
@@ -24,25 +27,34 @@ if not sys.stderr.isatty():
 
 logger = structlog.get_logger(__name__)
 
+
 import chainlit as cl
-from chainlit import user_session
-from langchain_core.runnables.config import RunnableConfig
-
-from weather_chat_ai.base import WeatherChatAI
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 
 
-async def run_chain(input: str):
-    chain = cl.user_session.get("chain")
+def update_chat_history(message: BaseMessage) -> List[BaseMessage]:
+    chat_history = cl.user_session.get("chat_history")
+    if chat_history is None:
+        chat_history = []
 
-    cb = cl.AsyncLangchainCallbackHandler()
+    chat_history.append(message)
+    cl.user_session.set("chat_history", chat_history)
+    return chat_history
 
+
+async def run_agent(input: str):
+    chat_history = update_chat_history(HumanMessage(content=input))
+    session_id = cl.user_session.get("id")
+
+    agent = WeatherGraphAgent(messages=chat_history, session_id=session_id)
     msg = cl.Message(content="")
 
-    async for chunk in chain.astream(
-        {"input": input},
-        config=RunnableConfig(callbacks=[cb]),
-    ):
-        await msg.stream_token(chunk.content)
+    full_response = ""
+    async for chunk in agent.astream():
+        full_response += chunk
+        await msg.stream_token(chunk)
+
+    update_chat_history(AIMessage(content=full_response))
 
 
 @cl.action_callback("initial_hints")
@@ -55,12 +67,10 @@ async def on_action(action):
         author_is_user=True,
     ).send()
 
-    await run_chain(input)
+    await run_agent(input)
 
 
 async def send_intro(whoami):
-    session_id = cl.user_session.get("id")
-    user_session.set("chain", WeatherChatAI(whoami=whoami, session_id=session_id))
     initial_choices = {
         "denver": "Should I wear a jacket tonight in Denver?",
         "seattle": "I'm traveling to Seattle on Monday. Should I bring an umbrella?",
@@ -121,7 +131,7 @@ My human supervisors 👥 would love to know who you are and how to get in touch
 @cl.on_message
 async def main(message: cl.Message):
     try:
-        await run_chain(message.content)
+        await run_agent(message.content)
 
     except Exception as e:
         logger.error("An exception occurred: %s", e, exc_info=True)
