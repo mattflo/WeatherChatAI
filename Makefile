@@ -37,7 +37,7 @@ fly-chainlit:
 ## streamlit:              run the app
 .PHONY: streamlit
 streamlit:
-	poetry run streamlit run app.py
+	poetry run streamlit run streamlit_app.py
 
 ## lint:                  run linters
 .PHONY: lint
