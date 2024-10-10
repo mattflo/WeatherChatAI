@@ -24,16 +24,6 @@ watch:
 test:
 	poetry run pytest
 
-## chainlit:              run the app
-.PHONY: chainlit
-chainlit:
-	poetry run chainlit run app.py -w
-
-## fly-chainlit:          run the app in fly.io mode
-.PHONY: fly-chainlit
-fly-chainlit:
-	poetry run chainlit run fly_app.py -w
-
 ## streamlit:              run the app
 .PHONY: streamlit
 streamlit:
@@ -51,26 +41,3 @@ lint:
 format:
 	poetry run black .
 	poetry run ruff --select I --fix .
-
-## deploy:                deploy to fly.io
-deploy:
-	@poetry export -f requirements.txt --output requirements.txt
-
-	@if [ -z "$$(git status --porcelain)" ]; then \
-		flyctl deploy && git tag -f fly.io; \
-	else \
-	    git status --porcelain; \
-	fi
-
-## logs:                  watch the fly.io logs
-logs:
-	@flyctl logs
-
-## ssh:                   ssh into the fly.io instance
-ssh:
-	@flyctl ssh console
-
-## scale:                 show the fly.io instance scale info
-scale:
-	@echo https://fly.io/docs/apps/legacy-scaling/#viewing-the-current-vm-size
-	@flyctl scale show

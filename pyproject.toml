@@ -9,7 +9,6 @@ packages = [{ include = "weather_chat_ai" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 langchain = "~0.3.2"
-chainlit = "~0"
 pytz = "^2023.3"
 openai = "^1.51.0"
 structlog = "^23.2.0"

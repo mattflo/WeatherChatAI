@@ -2,7 +2,7 @@
 
 ☁️ ❄️ ⚡ Don't just get the weather. Get the answer to your underlying weather-related question. Using retrieval augmented generation with LangGraph, OpenAI, the National Weather Service, and Streamlit. ⛅ 🌡️ ☂️
 
-Live Demo: https://weather-chat-ai.fly.dev/
+Live Demo: https://weather-chat-ai.streamlit.app/
 
 ## 👥 Who is this for?
 
